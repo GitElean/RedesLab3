@@ -1,5 +1,11 @@
 package src;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class Main {
@@ -11,7 +17,7 @@ public class Main {
         // GET NETWORK NODE NAMES
         ArrayList<String> node_names = getNodeNames(topology);
         // STORE NODE NAME
-        String user_name = "";
+        String user_name;
         System.out.print("Enter node name: ");
         user_name = scanner.nextLine();
         // VERIFY THAT NODE IS DEFINED IN TOPOLOGY
@@ -23,10 +29,15 @@ public class Main {
         int user_option;
         while(true) {
             displayMenu();
+            // GET USER OPTION
             user_option = getIntInput(1, 4, 0);
             if(user_option == 0) {
+                // INVALID ANSWER
                 System.out.println("Enter a valid option");
                 continue;
+            }
+            if(user_option == 1) {
+                parseJSON();
             }
             if(user_option == 4) {
                 System.out.println("Exiting program ...");
@@ -37,8 +48,11 @@ public class Main {
     }
 
     public static void displayMenu() {
-        System.out.print("=== CLIENT MENU ===\n" +
-                "1. Enter \n");
+        System.out.print("""
+                === CLIENT MENU ===
+                1. Show Distance Vector
+                4. Exit Program
+                """);
     }
 
     public static ArrayList<ArrayList<String>> getTopology() {
@@ -53,12 +67,12 @@ public class Main {
 
     public static ArrayList<String> getNodeNames(ArrayList<ArrayList<String>> topology) {
         // GET each list[0] & list[2] in topology and return set result
-        Set<String> hash_set = new HashSet<String>();
+        Set<String> hash_set = new HashSet<>();
         for(ArrayList<String> temp : topology) {
             hash_set.add(temp.get(0));
             hash_set.add(temp.get(2));
         }
-        return new ArrayList<String>(hash_set);
+        return new ArrayList<>(hash_set);
     }
 
     public static int getIntInput(int min, int max, int def) {
@@ -70,5 +84,28 @@ public class Main {
         } catch(NumberFormatException e) {
             return def;
         }
+    }
+
+    public static void parseJSON() {
+        // READ .JSON FILE AND
+        String json_file = "src/Message.json";
+        StringBuilder json = new StringBuilder();
+        json.append("[");
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(json_file));
+            String line = "";
+            while((line = br.readLine()) != null) {
+                // APPEND INFORMATION
+                json.append(line);
+            }
+        } catch (IOException e) {
+            // ERROR OCURRED DURING .JSON FILE READING
+            System.out.println("An error ocurred while reading .json file");
+        }
+        json.append("]");
+        // CREATE NEW JSON ARRAY OBJECT
+        JSONArray jsonArray = new JSONArray(json.toString());
+        JSONObject jsonObject = jsonArray.getJSONObject(0);
+        System.out.println(jsonObject.getJSONObject("headers").getString("from"));
     }
 }

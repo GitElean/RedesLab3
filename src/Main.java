@@ -86,26 +86,44 @@ public class Main {
         }
     }
 
-    public static void parseJSON() {
+    public static Message parseJSON() {
         // READ .JSON FILE AND
         String json_file = "src/Message.json";
         StringBuilder json = new StringBuilder();
         json.append("[");
         try {
             BufferedReader br = new BufferedReader(new FileReader(json_file));
-            String line = "";
+            String line;
             while((line = br.readLine()) != null) {
                 // APPEND INFORMATION
                 json.append(line);
             }
+            json.append("]");
+            // CREATE NEW JSON ARRAY OBJECT
+            JSONArray jsonArray = new JSONArray(json.toString());
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            // STORE INFORMATION (MESSAGE CLASS)
+            Message result = new Message();
+            result.setType(jsonObject.getString("type"));
+            result.setFrom(jsonObject.getJSONObject("headers").getString("from"));
+            result.setTo(jsonObject.getJSONObject("headers").getString("to"));
+            result.setHop_count(jsonObject.getJSONObject("headers").getInt("hop_count"));
+            if(jsonObject.getString("type").equalsIgnoreCase("message")) {
+                result.setMessage(jsonObject.getString("payload"));
+            } else {
+                List<Object> temp = jsonObject.getJSONArray("payload").toList();
+                ArrayList<String> table_info = new ArrayList<>();
+                for(Object obj : temp) {
+                    table_info.add(obj.toString());
+                }
+                result.setTable_info(table_info);
+            }
+            // RETURN INFORMATION
+            return result;
         } catch (IOException e) {
             // ERROR OCURRED DURING .JSON FILE READING
             System.out.println("An error ocurred while reading .json file");
+            return null;
         }
-        json.append("]");
-        // CREATE NEW JSON ARRAY OBJECT
-        JSONArray jsonArray = new JSONArray(json.toString());
-        JSONObject jsonObject = jsonArray.getJSONObject(0);
-        System.out.println(jsonObject.getJSONObject("headers").getString("from"));
     }
 }

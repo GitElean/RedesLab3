@@ -44,7 +44,7 @@ public class Main {
                 if(json_msg != null) {
                     if(json_msg.getType().equals("info")) {
                         // UPDATE DISTANCE VECTOR TABLE
-                        dv.udpateTable(json_msg);
+                        dv.updateTable(node_name, json_msg);
                     }
                 }
             } else if(user_option == 2) {

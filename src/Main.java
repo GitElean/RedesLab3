@@ -33,17 +33,24 @@ public class Main {
         while(true) {
             displayMenu();
             // GET USER OPTION
-            user_option = getIntInput(1, 4, 0);
+            user_option = getIntInput(1, 3, 0);
             if(user_option == 0) {
                 // INVALID ANSWER
                 System.out.println("Enter a valid option");
                 continue;
-            }
-            if(user_option == 1) {
+            } else if(user_option == 1) {
+                // OBTAIN JSON INFORMATION
                 Message json_msg = parseJSON();
-
-            }
-            if(user_option == 3) {
+                if(json_msg != null) {
+                    if(json_msg.getType().equals("info")) {
+                        // UPDATE DISTANCE VECTOR TABLE
+                        dv.udpateTable(json_msg);
+                    }
+                }
+            } else if(user_option == 2) {
+                // DISTANCE VECTOR INFORMATION
+                dv.showCurrentTable();
+            } else {
                 // EXIT PROGRAM
                 System.out.println("Exiting program ...");
                 break;
@@ -117,10 +124,15 @@ public class Main {
             if(jsonObject.getString("type").equalsIgnoreCase("message")) {
                 result.setMessage(jsonObject.getString("payload"));
             } else {
-                List<Object> temp = jsonObject.getJSONArray("payload").toList();
-                ArrayList<String> table_info = new ArrayList<>();
+                // OBTAIN TABLE NEW INFORMATION
+                List<Object> temp = jsonObject.getJSONObject("payload").getJSONArray("distance_vector").toList();
+                List<List<String>> table_info = new ArrayList<>();
                 for(Object obj : temp) {
-                    table_info.add(obj.toString());
+                    // OBTAIN VALUES
+                    String vvv = obj.toString().substring(1, obj.toString().length()-1);
+                    List<String> entries = new ArrayList<>(Arrays.stream(vvv.split(",")).toList());
+                    entries.replaceAll(String::strip);
+                    table_info.add(entries);
                 }
                 result.setTable_info(table_info);
             }

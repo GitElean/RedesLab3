@@ -41,6 +41,15 @@ public class DistanceVector {
         }
     }
 
+    public void udpateTable(Message msg) {
+        // CHECK IF NODE NAME IS VALID
+        List<String> entry = getElement(msg.from);
+        if(entry == null) {
+            System.out.println(msg.from + " is not recognized");
+            return;
+        }
+    }
+
     public List<String> getElement(String name) {
         // OBTAIN ENTRY IN RESULT TABLE (DESTINATION, DISTANCE, HOP)
         for(List<String> temp : this.table_info)

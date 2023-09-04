@@ -1,6 +1,6 @@
 package src;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Message {
     String type;
@@ -8,7 +8,7 @@ public class Message {
     String to;
     int hop_count;
     String message;
-    ArrayList<String> table_info;
+    List<List<String>> table_info;
 
     public String getType() {
         return type;
@@ -50,11 +50,11 @@ public class Message {
         this.message = message;
     }
 
-    public ArrayList<String> getTable_info() {
+    public List<List<String>> getTable_info() {
         return table_info;
     }
 
-    public void setTable_info(ArrayList<String> table_info) {
+    public void setTable_info(List<List<String>> table_info) {
         this.table_info = table_info;
     }
 }

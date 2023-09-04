@@ -41,12 +41,37 @@ public class DistanceVector {
         }
     }
 
-    public void udpateTable(Message msg) {
+    public void updateTable(String node_name, Message msg) {
         // CHECK IF NODE NAME IS VALID
         List<String> entry = getElement(msg.from);
         if(entry == null) {
             System.out.println(msg.from + " is not recognized");
             return;
+        }
+        // UPDATE DISTANCES
+        int self_dist = Integer.parseInt(entry.get(1));
+        for(List<String> temp : msg.getTable_info()) {
+            if(temp.get(0).equals(node_name)) continue;
+            // CHECK NODE DISTANCE (-1 == INFINITE)
+            int node_dist = Integer.parseInt(temp.get(1));
+            if(node_dist < 0) continue;
+            // CHECK IF NODE IS VALID
+            List<String> self_node = getElement(temp.get(0));
+            if(self_node == null)  {
+                System.out.println(temp.get(0) + " is not recognized");
+                return;
+            }
+            // COMPARE SELF & NODE DISTANCES
+            if(self_dist + node_dist == Integer.parseInt(self_node.get(1))) {
+                if(self_node.get(2).contains(msg.from)) continue;
+                this.table_info.remove(self_node);
+                self_node.set(2, self_node.get(2)+","+msg.from);
+                this.table_info.add(self_node);
+            } else if(self_dist + node_dist < Integer.parseInt(self_node.get(1))) {
+                this.table_info.remove(self_node);
+                this.table_info.add(Arrays.asList(self_node.get(0), Integer.toString(self_dist+node_dist),
+                        temp.get(0)));
+            }
         }
     }
 

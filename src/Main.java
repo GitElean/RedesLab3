@@ -10,7 +10,6 @@ import java.util.*;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    static DistanceVector distanceVector = new DistanceVector();
 
     public static void main(String[] args) {
         // GET TOPOLOGY
@@ -27,7 +26,8 @@ public class Main {
             System.exit(1);
         }
         // === NODE VALUES ===
-        List<List<String>> dv_table = distanceVector.initialStep(node_name, topology);
+        DistanceVector dv = new DistanceVector();
+        dv.initialStep(node_name, topology);
         // === MAIN LOOP ===
         int user_option;
         while(true) {

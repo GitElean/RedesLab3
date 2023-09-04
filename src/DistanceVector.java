@@ -55,4 +55,13 @@ public class DistanceVector {
             result.add(temp.get(index));
         return result;
     }
+
+    public void showCurrentTable() {
+        // DISPLAY CURRENT TABLE INFORMATION
+        System.out.println("======= DISTANCE VECTOR =======");
+        for(List<String> temp : this.table_info) {
+            System.out.println("Node: "+temp.get(0)+", Distance: "+temp.get(1)+", Hop: "+temp.get(2));
+        }
+        System.out.println("");
+    }
 }

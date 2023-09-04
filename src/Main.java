@@ -10,22 +10,25 @@ import java.util.*;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
+    static DistanceVector distanceVector = new DistanceVector();
 
     public static void main(String[] args) {
         // GET TOPOLOGY
-        ArrayList<ArrayList<String>> topology = getTopology();
+        List<List<String>> topology = getTopology();
         // GET NETWORK NODE NAMES
-        ArrayList<String> node_names = getNodeNames(topology);
+        List<String> node_names = getNodeNames(topology);
         // STORE NODE NAME
-        String user_name;
+        String node_name;
         System.out.print("Enter node name: ");
-        user_name = scanner.nextLine();
+        node_name = scanner.nextLine();
         // VERIFY THAT NODE IS DEFINED IN TOPOLOGY
-        if(!node_names.contains(user_name)){
+        if(!node_names.contains(node_name)){
             System.out.println("Node name is invalid");
             System.exit(1);
         }
-        // MAIN LOOP
+        // === NODE VALUES ===
+        List<List<String>> dv_table = distanceVector.initialStep(node_name, topology);
+        // === MAIN LOOP ===
         int user_option;
         while(true) {
             displayMenu();
@@ -37,9 +40,11 @@ public class Main {
                 continue;
             }
             if(user_option == 1) {
-                parseJSON();
+                Message json_msg = parseJSON();
+
             }
-            if(user_option == 4) {
+            if(user_option == 3) {
+                // EXIT PROGRAM
                 System.out.println("Exiting program ...");
                 break;
             }
@@ -49,15 +54,16 @@ public class Main {
 
     public static void displayMenu() {
         System.out.print("""
-                === CLIENT MENU ===
-                1. Show Distance Vector
-                4. Exit Program
+                ======= CLIENT MENU =======
+                1. Parse JSON file (Message.json)
+                2. Show node information
+                3. Exit program
                 """);
     }
 
-    public static ArrayList<ArrayList<String>> getTopology() {
+    public static List<List<String>> getTopology() {
         // DEFINE NETWORK TOPOLOGY (NON DIRECTIONAL)
-        ArrayList<ArrayList<String>> topology = new ArrayList<>();
+        List<List<String>> topology = new ArrayList<>();
         // (list[0] -> list[1] -> list[2]) | (list[2] -> list[1] -> list[0])
         topology.add(new ArrayList<>(Arrays.asList("A", "1", "B")));
         topology.add(new ArrayList<>(Arrays.asList("A", "3", "C")));
@@ -65,10 +71,10 @@ public class Main {
         return topology;
     }
 
-    public static ArrayList<String> getNodeNames(ArrayList<ArrayList<String>> topology) {
+    public static List<String> getNodeNames(List<List<String>> topology) {
         // GET each list[0] & list[2] in topology and return set result
         Set<String> hash_set = new HashSet<>();
-        for(ArrayList<String> temp : topology) {
+        for(List<String> temp : topology) {
             hash_set.add(temp.get(0));
             hash_set.add(temp.get(2));
         }

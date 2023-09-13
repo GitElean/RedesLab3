@@ -25,9 +25,13 @@ public class Main {
             System.out.println("Node name is invalid");
             System.exit(1);
         }
-        // === NODE VALUES ===
+        // === NODE VALUES === Distance Vector
         DistanceVector dv = new DistanceVector();
         dv.initialStep(node_name, topology);
+
+        // === NODE VALUES === Djikstra
+        //DijkstraDataTransmission ddTrans = new DijkstraDataTransmission();
+        //ddTrans.initialSetup(node_name, topology);
         // === MAIN LOOP ===
         int user_option;
         while(true) {

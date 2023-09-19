@@ -26,12 +26,12 @@ public class Main {
             System.exit(1);
         }
         // === NODE VALUES === Distance Vector
-        DistanceVector dv = new DistanceVector();
-        dv.initialStep(node_name, topology);
+        //DistanceVector dv = new DistanceVector();
+        //dv.initialStep(node_name, topology);
 
         // === NODE VALUES === Djikstra
-        //DijkstraDataTransmission ddTrans = new DijkstraDataTransmission();
-        //ddTrans.initialSetup(node_name, topology);
+        DijkstraDataTransmission ddTrans = new DijkstraDataTransmission(node_name);
+        ddTrans.initialSetup(topology);
         // === MAIN LOOP ===
         int user_option;
         while(true) {
@@ -48,12 +48,14 @@ public class Main {
                 if(json_msg != null) {
                     if(json_msg.getType().equals("info")) {
                         // UPDATE DISTANCE VECTOR TABLE
-                        dv.updateTable(node_name, json_msg);
+                        //dv.updateTable(node_name, json_msg);
+                        ddTrans.updateTable(json_msg);
                     }
                 }
             } else if(user_option == 2) {
                 // DISTANCE VECTOR INFORMATION
-                dv.showCurrentTable();
+                //dv.showCurrentTable();
+                ddTrans.showCurrentTable();
             } else {
                 // EXIT PROGRAM
                 System.out.println("Exiting program ...");

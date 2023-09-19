@@ -1,0 +1,11 @@
+{
+  "type": "info",
+  "headers": {
+    "from" : "B",
+    "to" : "A",
+    "hop_count": 1
+  },
+  "payload": {
+    "distance_vector": [["A", "1", "A"], ["B", "0", "B"], ["C", "2", "C"]]
+  }
+}

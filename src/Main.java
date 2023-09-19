@@ -32,6 +32,9 @@ public class Main {
         // === NODE VALUES === Djikstra
         DijkstraDataTransmission ddTrans = new DijkstraDataTransmission(node_name);
         ddTrans.initialSetup(topology);
+        //DijkstraDataTransmission ddTrans = new DijkstraDataTransmission();
+        //ddTrans.initialSetup(node_name, topology);
+        //Flooding flooding = new Flooding(topology);
         // === MAIN LOOP ===
         int user_option;
         while(true) {
@@ -52,10 +55,16 @@ public class Main {
                         ddTrans.updateTable(json_msg);
                     }
                 }
+
+                //if(json_msg != null && json_msg.getType().equals("message")) {
+                //    flooding.floodMessage(node_name, json_msg.getMessage());
+                //}
             } else if(user_option == 2) {
                 // DISTANCE VECTOR INFORMATION
                 //dv.showCurrentTable();
                 ddTrans.showCurrentTable();
+                dv.showCurrentTable();
+                //flooding.showVisitedNodes();
             } else {
                 // EXIT PROGRAM
                 System.out.println("Exiting program ...");
